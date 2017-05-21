@@ -1,0 +1,54 @@
+---
+- name: get my WAN ip
+  uri:
+    url: http://checkip.amazonaws.com/
+    return_content: yes
+  register: my_ip
+
+- name: web access security group
+  ec2_group:
+    name: "{{ web_security_group }}"
+    state: "{{ web_security_group_state }}"
+    description: Web servers access security group
+    region: "{{ web_region }}"
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: "{{ my_ip.content | replace('\n', '') }}/32"
+    rules_egress:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 443 
+        to_port: 443
+        cidr_ip: 0.0.0.0/0
+
+
+
+- name: load balancer access security group
+  ec2_group:
+    name: "{{ web_lb_security_group }}"
+    state: "{{ web_lb_security_group_state }}"
+    description: Loadbalancer security group to serve the web traffic externally
+    region: "{{ web_region }}"
+    rules:
+     - proto: tcp
+       from_port: 80
+       to_port: 80
+       cidr_ip: 0.0.0.0/0
+    rules_egress:
+     - proto: all
+       from_port: all
+       to_port: all
+       cidr_ip: 0.0.0.0/0
+
+- name: web nodes ssh-key access using your {{ web_ssh_key_path }}
+  ec2_key:
+    region: "{{ web_region }}"
+    name: "{{ web_ssh_key }}"
+    state: "{{ web_ssh_key_state }}"
+    key_material: "{{ item }}"
+  with_file:  "{{ web_ssh_key_path }}"

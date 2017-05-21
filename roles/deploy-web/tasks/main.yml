@@ -1,0 +1,13 @@
+---
+- name: ensure "{{ web_html_path}}"  
+  file: 
+    path: "{{ web_html_path }}"  
+    state: directory  
+
+- name: deploy web from "{{ web_git_url }}"
+  git:
+    repo: "{{ web_git_url }}"
+    dest: "{{ web_html_path }}"
+    version: "{{ web_code_version }}"
+
+

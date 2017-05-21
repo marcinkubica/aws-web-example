@@ -1,0 +1,24 @@
+---
+- name: setup
+  ec2_elb_lb:
+    name: "{{ web_lb_name }}"
+    state: "{{ web_lb_state }}"
+    security_group_names: "{{ web_lb_security_group }}"
+    idle_timeout: 300
+    region: "{{ web_region }}"
+    zones:
+      - "{{ web_region }}a"
+      - "{{ web_region }}b"
+      - "{{ web_region }}c"
+      - "{{ web_region }}d"
+      - "{{ web_region }}e"
+
+    listeners:
+      - protocol: http
+        load_balancer_port: 80
+        instance_port: 80
+    stickiness:
+      type: application
+      enabled: yes
+      cookie: SESSIONID
+

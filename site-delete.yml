@@ -1,0 +1,26 @@
+---
+- hosts: localhost 
+  gather_facts: no
+  vars_files:
+  - group_vars/frontend
+
+  
+  roles:
+    - { role: loadbalancer, web_lb_state: absent }
+   
+    - { role: provision-web,
+        web_count: 0,
+        ssh_test_state: stopped }
+
+    - { role: security, 
+        web_security_group_state: absent, 
+        web_lb_security_group_state: absent,
+        web_ssh_key_state: absent }   
+ 
+  tasks: 
+    - debug:
+        msg: 
+          - "~~~~~~~~~~~~~~~~~~~~~~~~~~"
+          - "Site demolition completed."
+          - "~~~~~~~~~~~~~~~~~~~~~~~~~~"
+

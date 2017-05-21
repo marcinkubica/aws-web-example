@@ -1,0 +1,14 @@
+---
+- name: get elb facts
+  local_action: ec2_elb_facts
+  args:
+    region: "{{ web_region }}"
+    names: "{{ web_lb_name }}"
+  register: elb
+
+- debug:
+    msg: 
+      - "~~~"
+      - "Your web is loadbalanced under AWS LB at http://{{ elb.elbs.0.dns_name }}"
+      - "~~~"
+

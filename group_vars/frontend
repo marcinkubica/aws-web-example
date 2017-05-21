@@ -1,0 +1,29 @@
+---
+
+web_ssh_key: web-ssh-key
+web_ssh_key_state: present
+web_ssh_key_path: ~/.ssh/id_rsa.pub
+ssh_test_state: started
+
+web_security_group: web-servers-security-group
+web_security_group_state: present
+
+web_count: 1
+web_ami_id: ami-46c1b650
+web_instance_type: t2.micro
+web_vol_size: 8
+web_vol_type: standard 
+web_tag: "{'node':'web'}"
+web_tag_playbook: "tag_node_web"
+web_region: us-east-1
+
+web_lb_name: web-lb
+web_lb_state: present
+web_lb_register_state: present
+web_lb_security_group: web-lb-security-group
+web_lb_security_group_state: present
+
+web_html_path: /var/www/html
+web_git_url: http://github.com/marcinkubica/web-code-example.git 
+web_code_version: "v1.0"
+

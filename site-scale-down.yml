@@ -1,0 +1,19 @@
+---
+# Playbook for decreasing amount of web nodes
+
+- hosts: localhost
+  any_errors_fatal: true
+  gather_facts: no
+  vars_files:
+  - group_vars/frontend
+
+  tasks:
+
+  - name: updating instance count to {{ web_count }}
+    ec2:
+       region: "{{ web_region }}"
+       image: "{{ web_ami_id }}"
+       wait: true
+       exact_count: "{{ web_count }}"
+       count_tag: "{{ web_tag }}"
+       instance_tags: "{{ web_tag }}"

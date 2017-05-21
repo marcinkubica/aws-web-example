@@ -1,0 +1,10 @@
+---
+- name: LB register
+  become: false
+  local_action: ec2_elb
+  args:
+    state: "{{ web_lb_register_state }}"
+    ec2_elbs: "{{ web_lb_name }}"
+    region: "{{ web_region }}"
+    instance_id: "{{ ec2_id }}"
+

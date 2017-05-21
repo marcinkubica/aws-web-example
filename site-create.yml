@@ -1,0 +1,72 @@
+---
+# Infrastructure provisioning
+
+- hosts: localhost
+  any_errors_fatal: true
+  gather_facts: no
+  vars_files:
+  - group_vars/frontend
+
+  roles:
+  - role: security
+    tags: security
+  
+  - role: loadbalancer
+    tags: loadbalancer
+
+  - role: provision-web
+    tags:
+      - provision-web
+      - scale-up
+
+#15s warmup (optimistically working around ssh auth issue for newly created nodes refusing ssh-key logons.)
+  tasks:
+    - pause: 
+        seconds: 15
+      tags:
+        - provision-web
+        - scale-up
+   
+
+# Website configuration and deployment
+
+- hosts: "{{ web_tag_playbook }}"
+  any_errors_fatal: true
+  become: yes
+  remote_user: centos
+  vars_files:
+  - group_vars/frontend
+
+  roles:
+  - role: common
+    tags:
+      - common
+      - scale-up
+
+  - role: apache
+    tags:
+      - apache
+      - scale-up
+
+  - role: deploy-web
+    tags:
+     - deploy-web
+     - scale-up
+
+  - role: loadbalancer-register
+    tags:
+      - loadbalancer-register
+      - scale-up
+
+# Just a summary
+- hosts: localhost
+  gather_facts: no
+  vars_files:
+  - group_vars/frontend
+
+  roles: 
+  - role: site-summary
+    tags: site-summary
+
+
+

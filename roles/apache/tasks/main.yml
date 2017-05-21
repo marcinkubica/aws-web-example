@@ -1,0 +1,13 @@
+---
+- name: install Apache
+  yum: pkg=httpd state=present
+
+- name: configure SELinux for httpd
+  seboolean: name=httpd_can_network_connect state=yes persistent=yes
+
+- name: enable and start Apache
+  systemd: 
+    name: httpd 
+    enabled: yes
+    state: started
+
