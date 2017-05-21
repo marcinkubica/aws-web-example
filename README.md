@@ -4,7 +4,7 @@ Following Ansible playbook deploys a simple html web code (off a git repo). It w
 
 Additionally you will be scale the deployment up or down, by adding or removing instances or tell Ansible to wipe and clean the site entirelly. Please have a look at `group_vars/frontend`file and identify any possible clash in variable names used.
 
-###Installation
+### Installation
 You will need a CentOS Linux box and playbooks were tested with Ansible 2.3. If you don't have CentOS to use as a deployment box you might use `Vagrant` to bring up one quickly. Probably easiest way to do so is with Oracle VirtualBox.
 
  - Install VirtualBox from https://www.virtualbox.org/wiki/Downloads
@@ -20,17 +20,17 @@ vagrant ssh
  - Open your AWS IAM web console and generate (or reuse) your credentials. Add them to `aws_cred.sh` file and run `source ./aws_cred.sh` Ideally do it on a copy outside of the git folder for security reasons (or you might find publishing your credentials at PR or other push to github :) )
 - Change your directory back to the root folder afterwards.
 
-###Configuration
+### Configuration
 To speed-up the dynamic inventory script execution, the AWS region has been limited to `us-east-1` in file `inv/ec2.ini` To change it please also update `group_vars/frontend -> web_region`
 
 Amount of your web instances is controlled by `group_vars/frontend -> web_count` and is initially set to 1.
 
 Apart from the settings above there should be no other settings you would need to edit or modify for this example to work.
 
-###Provisioning and deployment
+### Provisioning and deployment
 To run this example simply execute `ansible-playbook site-create.yml` You will be notifed at the end what is your loadbalancer URL to access the website.
 
-###Scaling up.
+### Scaling up.
 After changing `web_count` to a higher value you can use two ways of applying this change:
 
  - By re-running the main playbook `ansible-playbook site-create.yml`
@@ -39,13 +39,13 @@ After changing `web_count` to a higher value you can use two ways of applying th
 
 Your newly created instances will be automatically added to the loadbalancer pool. Please note if you would have any of your previous instances in a 'stopped' state by now (ie. done manually or if they would die for some reason), the code objective is to check for instances running and any instances in a state other than running are treated as non-functional (or non-existent)
 
-###Scaling down.
+### Scaling down.
 After changng `web_count` to a lower value use `ansible-playbook site-scale-down.yml`
 
-###Wipe and clean your site
+### Wipe and clean your site
 In order to completelly wipe instaces, ssh key, security groups and the loadbalancer simply run: `ansible-playbook site-delete.yml` Please note this should only remove object previously provisioned by this project. All other objects should remain intact.
 
-###Other scenarios.
+### Other scenarios.
 Main playbook has several roles and each of the role is accessible via tags. You can list these with `ansible-playbook site-create.yml -l`
 
 *Updating web-code only:*
@@ -57,7 +57,7 @@ Main playbook has several roles and each of the role is accessible via tags. You
  - Use state 'present' to get the node back to the pool.
 
 
-###Examples
+### Examples
 
 *Main playbook*
 ```sh
