@@ -1,5 +1,9 @@
 ## **An example of load-balanced web service provisioning and deployment with Ansible and AWS**
 
+## Briefly - I wrote this code when looking for a job in a startup. I had no idea about AWS so I learned it in a week.
+
+You are discouraged to use it. It's oldschool. Use Terraform and Kubernetes.
+
 Following Ansible playbook deploys a simple html web code (off a git repo). It will take care of provisioning Linux instances, setting up loadbalancer with security groups as well as adding your deployment box' user ssh-key and WAN IP to the cloud for ssh access.
 
 Additionally you will be scale the deployment up or down, by adding or removing instances or tell Ansible to wipe and clean the site entirelly. Please have a look at `group_vars/frontend`file and identify any possible clash in variable names used.
